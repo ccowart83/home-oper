@@ -18,18 +18,12 @@ spec:
     interval: 1m
     logLevel: info
     
-    provider: 
+    provider:
       name: webhook
-    
-    extraArgs:
-      - --webhook-provider-url=http://localhost:8888
-    
-    sidecars:
-      - name: adguard-webhook
-        image: ghcr.io/muhlba91/external-dns-provider-adguard:v8.0.0
-        ports:
-          - containerPort: 8888
-            name: webhook
+      webhook:
+        image:
+          repository: ghcr.io/muhlba91/external-dns-provider-adguard
+          tag: v8.0.0
         env:
           - name: ADGUARD_URL
             value: "http://192.168.1.87:88"
@@ -66,6 +60,9 @@ spec:
           initialDelaySeconds: 10
           timeoutSeconds: 5
     
+    extraArgs:
+      - --webhook-provider-url=http://localhost:8888
+    
     sources:
       - service
       - ingress
@@ -73,7 +70,7 @@ spec:
     domainFilters:
       - local.claytoncowart.com
     
-    policy: sync  # or "upsert-only" if you don't want it to delete records
+    policy: sync
     
     txtOwnerId: "external-dns-k8s"
     txtPrefix: "_external-dns."
