@@ -50,15 +50,19 @@ spec:
         livenessProbe:
           httpGet:
             path: /health
-            port: 8888
+            port: webhook
           initialDelaySeconds: 10
           timeoutSeconds: 5
         readinessProbe:
           httpGet:
             path: /health
-            port: 8888
+            port: webhook
           initialDelaySeconds: 10
           timeoutSeconds: 5
+        ports:
+          webhook:
+            port: 8888
+            protocol: TCP
     
     extraArgs:
       - --webhook-provider-url=http://localhost:8888
